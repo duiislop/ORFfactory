@@ -1,0 +1,292 @@
+# Creative Works Listing Website
+
+Below are **all files** required for a beginner?friendly creative portfolio website.
+
+---
+
+## ? index.html
+
+```html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>創作一覧</title>
+
+  <!-- Google Font (near?future feel) -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Noto+Sans+JP:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ===== Header ===== -->
+  <header class="header">
+    <h1>Creative Archive</h1>
+    <select id="categoryFilter">
+      <option value="all">すべて</option>
+      <option value="SF">SF</option>
+      <option value="恋愛">恋愛</option>
+      <option value="アイデア">アイデア</option>
+    </select>
+  </header>
+
+  <!-- ===== Works Grid ===== -->
+  <main>
+    <div id="worksGrid" class="grid"></div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
+```
+
+---
+
+## ? styles.css
+
+```css
+/* =========================
+   Base Theme (Dark Futuristic)
+========================= */
+body {
+  margin: 0;
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #0b0f1a;
+  color: #e6f1ff;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: #111827;
+  border-bottom: 1px solid #1f2937;
+}
+
+h1 {
+  font-family: 'Orbitron', sans-serif;
+  margin: 0;
+}
+
+select {
+  background: #020617;
+  color: white;
+  border: 1px solid #334155;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+/* =========================
+   Grid Layout
+========================= */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+/* =========================
+   Card Design
+========================= */
+.card {
+  background: #111827;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 15px;
+}
+
+.category {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* =========================
+   Detail Modal
+========================= */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background: #020617;
+  padding: 25px;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 90%;
+}
+
+.close-btn {
+  float: right;
+  cursor: pointer;
+  font-size: 20px;
+}
+```
+
+---
+
+## ? script.js
+
+```javascript
+/* =====================================
+   Creative Works Data
+   ここに作品を追加するだけで表示されます
+===================================== */
+const works = [
+  {
+    id: 1,
+    title: "星間漂流",
+    category: "SF",
+    description: "宇宙船が未知領域を彷徨うSF物語。",
+    detail: "人類が到達できない領域で起こる哲学的SFストーリー。",
+    thumbnail: "https://source.unsplash.com/400x300/?space"
+  },
+  {
+    id: 2,
+    title: "雨の日の約束",
+    category: "恋愛",
+    description: "雨から始まる恋愛短編。",
+    detail: "偶然の再会から始まる静かな恋の物語。",
+    thumbnail: "https://source.unsplash.com/400x300/?rain"
+  },
+  {
+    id: 3,
+    title: "未来都市アイデア",
+    category: "アイデア",
+    description: "未来都市の設定メモ。",
+    detail: "AIと共存する都市構造のアイデア集。",
+    thumbnail: "https://source.unsplash.com/400x300/?cyberpunk"
+  }
+];
+
+const grid = document.getElementById("worksGrid");
+const filter = document.getElementById("categoryFilter");
+
+/* =====================================
+   Card Rendering
+===================================== */
+function renderWorks(list) {
+  grid.innerHTML = "";
+
+  list.forEach(work => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <img src="${work.thumbnail}" alt="${work.title}">
+      <div class="card-content">
+        <h3>${work.title}</h3>
+        <p class="category">${work.category}</p>
+        <p>${work.description}</p>
+      </div>
+    `;
+
+    card.addEventListener("click", () => openDetail(work));
+    grid.appendChild(card);
+  });
+}
+
+/* =====================================
+   Detail Modal
+===================================== */
+const modal = document.createElement("div");
+modal.className = "modal";
+
+modal.innerHTML = `
+  <div class="modal-content">
+    <span class="close-btn">×</span>
+    <div id="modalBody"></div>
+  </div>
+`;
+
+document.body.appendChild(modal);
+
+const modalBody = modal.querySelector("#modalBody");
+const closeBtn = modal.querySelector(".close-btn");
+
+function openDetail(work) {
+  modalBody.innerHTML = `
+    <h2>${work.title}</h2>
+    <p><strong>カテゴリ:</strong> ${work.category}</p>
+    <p>${work.detail}</p>
+  `;
+
+  modal.classList.add("active");
+}
+
+closeBtn.onclick = () => modal.classList.remove("active");
+modal.onclick = e => {
+  if (e.target === modal) modal.classList.remove("active");
+};
+
+/* =====================================
+   Category Filter
+===================================== */
+filter.addEventListener("change", () => {
+  const value = filter.value;
+
+  if (value === "all") {
+    renderWorks(works);
+  } else {
+    renderWorks(works.filter(w => w.category === value));
+  }
+});
+
+/* 初期表示 */
+renderWorks(works);
+```
+
+---
+
+## ? 使い方（初心者向け）
+
+1. フォルダを作成
+2. 上の3ファイルを保存
+
+   * index.html
+   * styles.css
+   * script.js
+3. index.html をダブルクリック
+
+作品を追加したい場合は **script.js の works 配列に追加**するだけです。
+
+---
+
+## ? カスタマイズ例
+
+* ライトテーマ → body背景を `#ffffff`
+* カテゴリ追加 → select と works に追加
+* 画像 → 自分の画像URLへ変更
+
+---
+
+完成：カード形式・カテゴリ・詳細表示対応の創作アーカイブサイト ?
