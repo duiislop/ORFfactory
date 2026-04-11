@@ -1,292 +1,814 @@
-# Creative Works Listing Website
-
-Below are **all files** required for a beginner?friendly creative portfolio website.
-
----
-
-## ? index.html
-
-```html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>創作一覧</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORF factory — Original Romantic Fragment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=Noto+Serif+JP:wght@200;300;400&display=swap" rel="stylesheet">
 
-  <!-- Google Font (near?future feel) -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Noto+Sans+JP:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="styles.css" />
+  :root {
+    --gold: #c9a84c;
+    --gold-dim: #8a6e2e;
+    --cream: #f0e8d8;
+    --ink: #0d0b08;
+    --ink-soft: #1a1712;
+    --text-dim: #7a6e5a;
+    --text-muted: #4a4438;
+    --line: rgba(201,168,76,0.2);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 200;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* ─── FILM GRAIN OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ─── FILM STRIP HEADER ─── */
+  .filmstrip {
+    width: 100%;
+    height: 8px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--gold) 0px,
+      var(--gold) 10px,
+      transparent 10px,
+      transparent 18px
+    );
+    opacity: 0.3;
+    position: fixed;
+    top: 0;
+    z-index: 100;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 8px;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 3rem;
+    background: linear-gradient(to bottom, rgba(13,11,8,0.95), transparent);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.7rem;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    color: var(--cream);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.3s, color 0.3s;
+  }
+
+  .nav-links a:hover { opacity: 1; color: var(--gold); }
+
+  /* ─── HERO ─── */
+  #hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,168,76,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(201,168,76,0.04) 0%, transparent 60%);
+  }
+
+  /* Letterbox bars */
+  #hero::before, #hero::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    height: 10vh;
+    background: black;
+    z-index: 2;
+  }
+  #hero::before { top: 0; }
+  #hero::after { bottom: 0; }
+
+  .hero-content {
+    position: relative;
+    z-index: 3;
+    animation: fadeIn 2s ease forwards;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.5em;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeIn 1.5s 0.5s ease forwards;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(4rem, 12vw, 9rem);
+    font-weight: 300;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    color: var(--cream);
+    opacity: 0;
+    animation: fadeUp 1.5s 0.8s ease forwards;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-subtitle {
+    font-size: 0.75rem;
+    letter-spacing: 0.4em;
+    color: var(--text-dim);
+    margin-top: 2rem;
+    opacity: 0;
+    animation: fadeIn 1.5s 1.4s ease forwards;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 12vh;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    animation: fadeIn 2s 2s ease forwards;
+  }
+
+  .hero-scroll span {
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    color: var(--text-dim);
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: pulse 2s infinite;
+  }
+
+  /* ─── SECTION BASE ─── */
+  section {
+    padding: 8rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.5em;
+    color: var(--gold);
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+    max-width: 200px;
+  }
+
+  /* ─── ABOUT / WORLD ─── */
+  #world {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+    padding: 8rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .world-text h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--cream);
+    margin-bottom: 2rem;
+  }
+
+  .world-text h2 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .world-text p {
+    font-size: 0.9rem;
+    line-height: 2;
+    color: var(--text-dim);
+    margin-bottom: 1.5rem;
+  }
+
+  .world-visual {
+    position: relative;
+  }
+
+  .world-frame {
+    aspect-ratio: 4/5;
+    background: var(--ink-soft);
+    border: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .world-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(201,168,76,0.08) 0%, transparent 60%);
+  }
+
+  .world-frame-corner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-color: var(--gold);
+    border-style: solid;
+    opacity: 0.6;
+  }
+  .world-frame-corner.tl { top: 12px; left: 12px; border-width: 1px 0 0 1px; }
+  .world-frame-corner.tr { top: 12px; right: 12px; border-width: 1px 1px 0 0; }
+  .world-frame-corner.bl { bottom: 12px; left: 12px; border-width: 0 0 1px 1px; }
+  .world-frame-corner.br { bottom: 12px; right: 12px; border-width: 0 1px 1px 0; }
+
+  .world-placeholder-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+  }
+
+  /* ─── WORKS GALLERY ─── */
+  #works {
+    padding: 8rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .works-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .work-card {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    background: var(--ink-soft);
+    border: 1px solid var(--line);
+    transition: border-color 0.4s;
+  }
+
+  .work-card:hover { border-color: var(--gold-dim); }
+
+  .work-card:first-child {
+    grid-column: span 2;
+  }
+
+  .work-thumb {
+    aspect-ratio: 16/9;
+    background: linear-gradient(135deg, #1a1610 0%, #0d0b08 100%);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .work-card:first-child .work-thumb {
+    aspect-ratio: 21/9;
+  }
+
+  .work-thumb-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.4;
+    transition: opacity 0.4s, transform 0.6s;
+  }
+
+  .work-card:hover .work-thumb-bg {
+    opacity: 0.6;
+    transform: scale(1.04);
+  }
+
+  .work-thumb-bg-1 {
+    background: radial-gradient(ellipse at 30% 60%, rgba(201,168,76,0.3) 0%, transparent 60%);
+  }
+  .work-thumb-bg-2 {
+    background: radial-gradient(ellipse at 70% 40%, rgba(100,80,160,0.3) 0%, transparent 60%);
+  }
+  .work-thumb-bg-3 {
+    background: radial-gradient(ellipse at 50% 50%, rgba(180,60,60,0.3) 0%, transparent 60%);
+  }
+
+  .work-play {
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(201,168,76,0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+    transition: border-color 0.3s, background 0.3s;
+  }
+
+  .work-card:hover .work-play {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.1);
+  }
+
+  .work-play::after {
+    content: '';
+    border-left: 12px solid var(--gold);
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    margin-left: 3px;
+  }
+
+  .work-info {
+    padding: 1rem 1.2rem;
+  }
+
+  .work-tag {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    opacity: 0.7;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  .work-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--cream);
+    opacity: 0.9;
+  }
+
+  /* ─── VIDEO SECTION ─── */
+  #video {
+    padding: 8rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .video-wrapper {
+    position: relative;
+    margin-top: 3rem;
+    border: 1px solid var(--line);
+  }
+
+  .video-wrapper::before, .video-wrapper::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-color: var(--gold);
+    border-style: solid;
+    z-index: 2;
+    opacity: 0.5;
+  }
+  .video-wrapper::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+  .video-wrapper::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+  .video-embed {
+    aspect-ratio: 16/9;
+    width: 100%;
+    background: #000;
+    display: block;
+    border: none;
+  }
+
+  .video-placeholder {
+    aspect-ratio: 16/9;
+    background: var(--ink-soft);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+  }
+
+  /* ─── PROFILE ─── */
+  #profile {
+    padding: 8rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-top: 1px solid var(--line);
+  }
+
+  .profile-inner {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .profile-avatar {
+    width: 200px;
+    height: 200px;
+    border: 1px solid var(--line);
+    background: var(--ink-soft);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+  }
+
+  .profile-avatar-corner {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-color: var(--gold);
+    border-style: solid;
+    opacity: 0.5;
+  }
+  .profile-avatar-corner.tl { top: 6px; left: 6px; border-width: 1px 0 0 1px; }
+  .profile-avatar-corner.br { bottom: 6px; right: 6px; border-width: 0 1px 1px 0; }
+
+  .profile-info h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 300;
+    color: var(--cream);
+    margin-bottom: 0.4rem;
+  }
+
+  .profile-role {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+
+  .profile-bio {
+    font-size: 0.85rem;
+    line-height: 2;
+    color: var(--text-dim);
+    margin-bottom: 2rem;
+  }
+
+  /* ─── SNS LINKS ─── */
+  .sns-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .sns-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.2rem;
+    border: 1px solid var(--line);
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    font-family: 'Bebas Neue', sans-serif;
+    transition: border-color 0.3s, color 0.3s;
+  }
+
+  .sns-link:hover {
+    border-color: var(--gold-dim);
+    color: var(--gold);
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 3rem;
+    text-align: center;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: var(--text-muted);
+  }
+
+  footer strong {
+    font-family: 'Bebas Neue', sans-serif;
+    color: var(--gold);
+    font-size: 0.9rem;
+    letter-spacing: 0.4em;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .filmstrip-bottom {
+    width: 100%;
+    height: 8px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--gold) 0px,
+      var(--gold) 10px,
+      transparent 10px,
+      transparent 18px
+    );
+    opacity: 0.3;
+    margin-top: 2rem;
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50%       { opacity: 1; }
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { gap: 1.2rem; }
+    #world { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 1.5rem; }
+    #works { padding: 5rem 1.5rem; }
+    .works-grid { grid-template-columns: 1fr; }
+    .work-card:first-child { grid-column: span 1; }
+    #video { padding: 5rem 1.5rem; }
+    #profile { padding: 5rem 1.5rem; }
+    .profile-inner { grid-template-columns: 1fr; }
+    section { padding: 5rem 1.5rem; }
+  }
+</style>
 </head>
 <body>
 
-  <!-- ===== Header ===== -->
-  <header class="header">
-    <h1>Creative Archive</h1>
-    <select id="categoryFilter">
-      <option value="all">すべて</option>
-      <option value="SF">SF</option>
-      <option value="恋愛">恋愛</option>
-      <option value="アイデア">アイデア</option>
-    </select>
-  </header>
+<div class="filmstrip"></div>
 
-  <!-- ===== Works Grid ===== -->
-  <main>
-    <div id="worksGrid" class="grid"></div>
-  </main>
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">ORF factory</a>
+  <ul class="nav-links">
+    <li><a href="#world">WORLD</a></li>
+    <li><a href="#works">WORKS</a></li>
+    <li><a href="#video">VIDEO</a></li>
+    <li><a href="#profile">ABOUT</a></li>
+  </ul>
+</nav>
 
-  <script src="script.js"></script>
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Original Romantic Fragment</p>
+    <h1 class="hero-title">ORF<br><em>factory</em></h1>
+    <p class="hero-subtitle">AI × VOICE × STORY</p>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>SCROLL</span>
+  </div>
+</section>
+
+<!-- WORLD / ABOUT -->
+<div id="world">
+  <div class="world-text">
+    <p class="section-label">WORLD VIEW</p>
+    <h2>断片から<br>生まれる<br><em>物語。</em></h2>
+    <p>
+      ORF factory は、AIが生成した映像・画像・声と、オリジナルのストーリーテリングを融合させたクリエイティブユニットです。
+    </p>
+    <p>
+      「Original Romantic Fragment」——断片的な美しさの中に宿る、ロマンと感情の欠片。それが私たちの根幹にある思想です。
+    </p>
+    <p>
+      映画的な光と影の中で、あなただけの物語を見つけてください。
+    </p>
+  </div>
+  <div class="world-visual">
+    <div class="world-frame">
+      <div class="world-frame-corner tl"></div>
+      <div class="world-frame-corner tr"></div>
+      <div class="world-frame-corner bl"></div>
+      <div class="world-frame-corner br"></div>
+      <div class="world-placeholder-text">
+        <!-- ここにキービジュアルを入れる -->
+        <span>KEY VISUAL</span>
+        <span style="opacity:0.4; font-size:0.5rem;">— img タグに差し替え —</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WORKS GALLERY -->
+<div id="works">
+  <p class="section-label">WORKS</p>
+  <div class="works-grid">
+
+    <!-- Feature card -->
+    <div class="work-card">
+      <div class="work-thumb">
+        <div class="work-thumb-bg work-thumb-bg-1"></div>
+        <div class="work-play"></div>
+      </div>
+      <div class="work-info">
+        <span class="work-tag">LATEST WORK · 2025</span>
+        <p class="work-title">作品タイトル（メイン）</p>
+      </div>
+    </div>
+
+    <!-- Sub card 1 -->
+    <div class="work-card">
+      <div class="work-thumb">
+        <div class="work-thumb-bg work-thumb-bg-2"></div>
+        <div class="work-play"></div>
+      </div>
+      <div class="work-info">
+        <span class="work-tag">SHORT FILM</span>
+        <p class="work-title">作品タイトル 02</p>
+      </div>
+    </div>
+
+    <!-- Sub card 2 -->
+    <div class="work-card">
+      <div class="work-thumb">
+        <div class="work-thumb-bg work-thumb-bg-3"></div>
+        <div class="work-play"></div>
+      </div>
+      <div class="work-info">
+        <span class="work-tag">IMAGE STORY</span>
+        <p class="work-title">作品タイトル 03</p>
+      </div>
+    </div>
+
+    <!-- Sub card 3 -->
+    <div class="work-card">
+      <div class="work-thumb">
+        <div class="work-thumb-bg work-thumb-bg-1" style="background: radial-gradient(ellipse at 50% 30%, rgba(80,140,120,0.3) 0%, transparent 60%);"></div>
+        <div class="work-play"></div>
+      </div>
+      <div class="work-info">
+        <span class="work-tag">VOICE DRAMA</span>
+        <p class="work-title">作品タイトル 04</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- VIDEO EMBED -->
+<div id="video">
+  <p class="section-label">FEATURED VIDEO</p>
+  <div class="video-wrapper">
+    <!--
+      YouTube埋め込みの場合:
+      <iframe class="video-embed" src="https://www.youtube.com/embed/YOUR_VIDEO_ID" allowfullscreen></iframe>
+
+      Vimeo埋め込みの場合:
+      <iframe class="video-embed" src="https://player.vimeo.com/video/YOUR_VIDEO_ID" allowfullscreen></iframe>
+    -->
+    <div class="video-placeholder">
+      <span>FEATURED VIDEO</span>
+      <span style="opacity:0.4; font-size:0.55rem;">— iframe に差し替え —</span>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE + SNS -->
+<div id="profile">
+  <p class="section-label">ABOUT</p>
+  <div class="profile-inner">
+    <div class="profile-avatar">
+      <div class="profile-avatar-corner tl"></div>
+      <div class="profile-avatar-corner br"></div>
+      <span style="font-size:0.55rem; letter-spacing:0.15em; color:var(--text-muted);">PHOTO</span>
+    </div>
+    <div class="profile-info">
+      <h3>ORF factory</h3>
+      <span class="profile-role">Original Romantic Fragment</span>
+      <p class="profile-bio">
+        AIが生み出す映像・画像・音声を素材に、オリジナルストーリーを紡ぐクリエイティブプロジェクト。<br>
+        映画的な世界観と、感情の断片から生まれる物語を発信しています。<br>
+        ※ プロフィール文はここに記入してください。
+      </p>
+      <div class="sns-links">
+        <a href="#" class="sns-link">▶ YouTube</a>
+        <a href="#" class="sns-link">◆ X / Twitter</a>
+        <a href="#" class="sns-link">◉ Instagram</a>
+        <a href="#" class="sns-link">▷ niconico</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <strong>ORF factory</strong>
+  <p>Original Romantic Fragment — All Rights Reserved</p>
+  <div class="filmstrip-bottom"></div>
+</footer>
+
+<script>
+  // Scroll-reveal animation
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.work-card, .world-text, .world-visual, .video-wrapper, .profile-inner').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+    observer.observe(el);
+  });
+
+  // Stagger work cards
+  document.querySelectorAll('.work-card').forEach((card, i) => {
+    card.style.transitionDelay = `${i * 0.1}s`;
+  });
+</script>
+
 </body>
 </html>
-```
-
----
-
-## ? styles.css
-
-```css
-/* =========================
-   Base Theme (Dark Futuristic)
-========================= */
-body {
-  margin: 0;
-  font-family: 'Noto Sans JP', sans-serif;
-  background: #0b0f1a;
-  color: #e6f1ff;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  background: #111827;
-  border-bottom: 1px solid #1f2937;
-}
-
-h1 {
-  font-family: 'Orbitron', sans-serif;
-  margin: 0;
-}
-
-select {
-  background: #020617;
-  color: white;
-  border: 1px solid #334155;
-  padding: 8px;
-  border-radius: 6px;
-}
-
-/* =========================
-   Grid Layout
-========================= */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
-  padding: 20px;
-}
-
-/* =========================
-   Card Design
-========================= */
-.card {
-  background: #111827;
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-
-.card img {
-  width: 100%;
-  height: 160px;
-  object-fit: cover;
-}
-
-.card-content {
-  padding: 15px;
-}
-
-.category {
-  font-size: 12px;
-  opacity: 0.7;
-}
-
-/* =========================
-   Detail Modal
-========================= */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.8);
-  display: none;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal.active {
-  display: flex;
-}
-
-.modal-content {
-  background: #020617;
-  padding: 25px;
-  border-radius: 12px;
-  max-width: 600px;
-  width: 90%;
-}
-
-.close-btn {
-  float: right;
-  cursor: pointer;
-  font-size: 20px;
-}
-```
-
----
-
-## ? script.js
-
-```javascript
-/* =====================================
-   Creative Works Data
-   ここに作品を追加するだけで表示されます
-===================================== */
-const works = [
-  {
-    id: 1,
-    title: "星間漂流",
-    category: "SF",
-    description: "宇宙船が未知領域を彷徨うSF物語。",
-    detail: "人類が到達できない領域で起こる哲学的SFストーリー。",
-    thumbnail: "https://source.unsplash.com/400x300/?space"
-  },
-  {
-    id: 2,
-    title: "雨の日の約束",
-    category: "恋愛",
-    description: "雨から始まる恋愛短編。",
-    detail: "偶然の再会から始まる静かな恋の物語。",
-    thumbnail: "https://source.unsplash.com/400x300/?rain"
-  },
-  {
-    id: 3,
-    title: "未来都市アイデア",
-    category: "アイデア",
-    description: "未来都市の設定メモ。",
-    detail: "AIと共存する都市構造のアイデア集。",
-    thumbnail: "https://source.unsplash.com/400x300/?cyberpunk"
-  }
-];
-
-const grid = document.getElementById("worksGrid");
-const filter = document.getElementById("categoryFilter");
-
-/* =====================================
-   Card Rendering
-===================================== */
-function renderWorks(list) {
-  grid.innerHTML = "";
-
-  list.forEach(work => {
-    const card = document.createElement("div");
-    card.className = "card";
-
-    card.innerHTML = `
-      <img src="${work.thumbnail}" alt="${work.title}">
-      <div class="card-content">
-        <h3>${work.title}</h3>
-        <p class="category">${work.category}</p>
-        <p>${work.description}</p>
-      </div>
-    `;
-
-    card.addEventListener("click", () => openDetail(work));
-    grid.appendChild(card);
-  });
-}
-
-/* =====================================
-   Detail Modal
-===================================== */
-const modal = document.createElement("div");
-modal.className = "modal";
-
-modal.innerHTML = `
-  <div class="modal-content">
-    <span class="close-btn">×</span>
-    <div id="modalBody"></div>
-  </div>
-`;
-
-document.body.appendChild(modal);
-
-const modalBody = modal.querySelector("#modalBody");
-const closeBtn = modal.querySelector(".close-btn");
-
-function openDetail(work) {
-  modalBody.innerHTML = `
-    <h2>${work.title}</h2>
-    <p><strong>カテゴリ:</strong> ${work.category}</p>
-    <p>${work.detail}</p>
-  `;
-
-  modal.classList.add("active");
-}
-
-closeBtn.onclick = () => modal.classList.remove("active");
-modal.onclick = e => {
-  if (e.target === modal) modal.classList.remove("active");
-};
-
-/* =====================================
-   Category Filter
-===================================== */
-filter.addEventListener("change", () => {
-  const value = filter.value;
-
-  if (value === "all") {
-    renderWorks(works);
-  } else {
-    renderWorks(works.filter(w => w.category === value));
-  }
-});
-
-/* 初期表示 */
-renderWorks(works);
-```
-
----
-
-## ? 使い方（初心者向け）
-
-1. フォルダを作成
-2. 上の3ファイルを保存
-
-   * index.html
-   * styles.css
-   * script.js
-3. index.html をダブルクリック
-
-作品を追加したい場合は **script.js の works 配列に追加**するだけです。
-
----
-
-## ? カスタマイズ例
-
-* ライトテーマ → body背景を `#ffffff`
-* カテゴリ追加 → select と works に追加
-* 画像 → 自分の画像URLへ変更
-
----
-
-完成：カード形式・カテゴリ・詳細表示対応の創作アーカイブサイト ?
