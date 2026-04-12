@@ -12,14 +12,17 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --gold: #c9a84c;
-    --gold-dim: #8a6e2e;
-    --cream: #f0e8d8;
-    --ink: #0d0b08;
-    --ink-soft: #1a1712;
-    --text-dim: #7a6e5a;
-    --text-muted: #4a4438;
-    --line: rgba(201,168,76,0.2);
+    --gold: #7ec8e3;
+    --gold-dim: #a78bfa;
+    --cream: #e0f0ff;
+    --ink: #06050f;
+    --ink-soft: #0d0b1e;
+    --text-dim: #7b85b8;
+    --text-muted: #3a3660;
+    --line: rgba(100,150,255,0.18);
+    --accent-pink: #f472b6;
+    --accent-cyan: #67e8f9;
+    --accent-purple: #a78bfa;
   }
 
   html { scroll-behavior: smooth; }
@@ -50,12 +53,12 @@
     height: 8px;
     background: repeating-linear-gradient(
       90deg,
-      var(--gold) 0px,
-      var(--gold) 10px,
+      #a78bfa 0px,
+      #67e8f9 10px,
       transparent 10px,
       transparent 18px
     );
-    opacity: 0.3;
+    opacity: 0.5;
     position: fixed;
     top: 0;
     z-index: 100;
@@ -72,7 +75,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 1.2rem 3rem;
-    background: linear-gradient(to bottom, rgba(13,11,8,0.95), transparent);
+    background: linear-gradient(to bottom, rgba(6,5,15,0.97), transparent);
   }
 
   .nav-logo {
@@ -118,8 +121,10 @@
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,168,76,0.06) 0%, transparent 70%),
-      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(201,168,76,0.04) 0%, transparent 60%);
+      radial-gradient(ellipse 70% 60% at 50% 40%, rgba(100,60,200,0.18) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 40% at 15% 75%, rgba(244,114,182,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 35% 35% at 85% 20%, rgba(103,232,249,0.1) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 50% at 80% 80%, rgba(167,139,250,0.1) 0%, transparent 60%);
   }
 
   /* Letterbox bars */
@@ -163,7 +168,10 @@
 
   .hero-title em {
     font-style: italic;
-    color: var(--gold);
+    background: linear-gradient(90deg, #a78bfa 0%, #67e8f9 50%, #f472b6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .hero-subtitle {
@@ -361,13 +369,13 @@
   }
 
   .work-thumb-bg-1 {
-    background: radial-gradient(ellipse at 30% 60%, rgba(201,168,76,0.3) 0%, transparent 60%);
+    background: radial-gradient(ellipse at 30% 60%, rgba(167,139,250,0.4) 0%, transparent 60%);
   }
   .work-thumb-bg-2 {
-    background: radial-gradient(ellipse at 70% 40%, rgba(100,80,160,0.3) 0%, transparent 60%);
+    background: radial-gradient(ellipse at 70% 40%, rgba(244,114,182,0.35) 0%, transparent 60%);
   }
   .work-thumb-bg-3 {
-    background: radial-gradient(ellipse at 50% 50%, rgba(180,60,60,0.3) 0%, transparent 60%);
+    background: radial-gradient(ellipse at 50% 50%, rgba(103,232,249,0.3) 0%, transparent 60%);
   }
 
   .work-play {
@@ -579,8 +587,8 @@
     height: 8px;
     background: repeating-linear-gradient(
       90deg,
-      var(--gold) 0px,
-      var(--gold) 10px,
+      #a78bfa 0px,
+      #67e8f9 10px,
       transparent 10px,
       transparent 18px
     );
@@ -627,10 +635,10 @@
 <nav>
   <a href="#hero" class="nav-logo">ORF factory</a>
   <ul class="nav-links">
-    <li><a href="#world">WORLD</a></li>
-    <li><a href="#works">WORKS</a></li>
-    <li><a href="#video">VIDEO</a></li>
-    <li><a href="#profile">ABOUT</a></li>
+    <li><a href="#world">world</a></li>
+    <li><a href="#works">works</a></li>
+    <li><a href="#video">video</a></li>
+    <li><a href="#profile">about</a></li>
   </ul>
 </nav>
 
@@ -638,20 +646,20 @@
 <section id="hero">
   <div class="hero-bg"></div>
   <div class="hero-content">
-    <p class="hero-eyebrow">Original Romantic Fragment</p>
+    <p class="hero-eyebrow">original romantic fragment</p>
     <h1 class="hero-title">ORF<br><em>factory</em></h1>
-    <p class="hero-subtitle">AI × VOICE × STORY</p>
+    <p class="hero-subtitle">ai × voice × story</p>
   </div>
   <div class="hero-scroll">
     <div class="scroll-line"></div>
-    <span>SCROLL</span>
+    <span>scroll</span>
   </div>
 </section>
 
 <!-- WORLD / ABOUT -->
 <div id="world">
   <div class="world-text">
-    <p class="section-label">WORLD VIEW</p>
+    <p class="section-label">world view</p>
     <h2>断片から<br>生まれる<br><em>物語。</em></h2>
     <p>
       ORF factory は、AIが生成した映像・画像・声と、オリジナルのストーリーテリングを融合させたクリエイティブユニットです。
@@ -669,18 +677,15 @@
       <div class="world-frame-corner tr"></div>
       <div class="world-frame-corner bl"></div>
       <div class="world-frame-corner br"></div>
-      <div class="world-placeholder-text">
-        <!-- ここにキービジュアルを入れる -->
-        <span>KEY VISUAL</span>
-        <span style="opacity:0.4; font-size:0.5rem;">— img タグに差し替え —</span>
-      </div>
+      <img src="OriginalRomanticFragment_KeyVisual.png" alt="ORF factory key visual"
+        style="width:100%; height:100%; object-fit:cover; position:absolute; inset:0;">
     </div>
   </div>
 </div>
 
 <!-- WORKS GALLERY -->
 <div id="works">
-  <p class="section-label">WORKS</p>
+  <p class="section-label">works</p>
   <div class="works-grid">
 
     <!-- Feature card -->
@@ -690,7 +695,7 @@
         <div class="work-play"></div>
       </div>
       <div class="work-info">
-        <span class="work-tag">LATEST WORK · 2025</span>
+        <span class="work-tag">latest work · 2025</span>
         <p class="work-title">作品タイトル（メイン）</p>
       </div>
     </div>
@@ -702,7 +707,7 @@
         <div class="work-play"></div>
       </div>
       <div class="work-info">
-        <span class="work-tag">SHORT FILM</span>
+        <span class="work-tag">short film</span>
         <p class="work-title">作品タイトル 02</p>
       </div>
     </div>
@@ -714,7 +719,7 @@
         <div class="work-play"></div>
       </div>
       <div class="work-info">
-        <span class="work-tag">IMAGE STORY</span>
+        <span class="work-tag">image story</span>
         <p class="work-title">作品タイトル 03</p>
       </div>
     </div>
@@ -726,7 +731,7 @@
         <div class="work-play"></div>
       </div>
       <div class="work-info">
-        <span class="work-tag">VOICE DRAMA</span>
+        <span class="work-tag">voice drama</span>
         <p class="work-title">作品タイトル 04</p>
       </div>
     </div>
@@ -736,7 +741,7 @@
 
 <!-- VIDEO EMBED -->
 <div id="video">
-  <p class="section-label">FEATURED VIDEO</p>
+  <p class="section-label">featured video</p>
   <div class="video-wrapper">
     <!--
       YouTube埋め込みの場合:
@@ -754,7 +759,7 @@
 
 <!-- PROFILE + SNS -->
 <div id="profile">
-  <p class="section-label">ABOUT</p>
+  <p class="section-label">about</p>
   <div class="profile-inner">
     <div class="profile-avatar">
       <div class="profile-avatar-corner tl"></div>
@@ -763,16 +768,16 @@
     </div>
     <div class="profile-info">
       <h3>ORF factory</h3>
-      <span class="profile-role">Original Romantic Fragment</span>
+      <span class="profile-role">original romantic fragment</span>
       <p class="profile-bio">
         AIが生み出す映像・画像・音声を素材に、オリジナルストーリーを紡ぐクリエイティブプロジェクト。<br>
         映画的な世界観と、感情の断片から生まれる物語を発信しています。<br>
         ※ プロフィール文はここに記入してください。
       </p>
       <div class="sns-links">
-        <a href="#" class="sns-link">▶ YouTube</a>
-        <a href="#" class="sns-link">◆ X / Twitter</a>
-        <a href="#" class="sns-link">◉ Instagram</a>
+        <a href="#" class="sns-link">▶ youtube</a>
+        <a href="#" class="sns-link">◆ x / twitter</a>
+        <a href="#" class="sns-link">◉ instagram</a>
         <a href="#" class="sns-link">▷ niconico</a>
       </div>
     </div>
@@ -782,7 +787,7 @@
 <!-- FOOTER -->
 <footer>
   <strong>ORF factory</strong>
-  <p>Original Romantic Fragment — All Rights Reserved</p>
+  <p>original romantic fragment — all rights reserved</p>
   <div class="filmstrip-bottom"></div>
 </footer>
 
